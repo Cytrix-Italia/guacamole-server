@@ -34,9 +34,10 @@ jobs:
           guacamole/guacamole:latest \
           mysql:latest" >> $GITHUB_ENV
 
-      # Scarica, ritagga e pusha ogni immagine
-      - name: Mirror images
+      # Scarica, ritagga, scansiona e pusha ogni immagine
+      - name: Mirror and scan images
         run: |
+          mkdir -p trivy-reports
           for IMAGE in $IMAGES; do
             echo "Importing $IMAGE ..."
             NAME=$(echo $IMAGE | cut -d: -f1 | sed 's|/|-|g' | tr '[:upper:]' '[:lower:]')
@@ -45,8 +46,16 @@ jobs:
 
             docker pull $IMAGE
             docker tag $IMAGE $TARGET
-            docker push $TARGET
 
+            echo "🔍 Running Trivy scan on $TARGET ..."
+            trivy image --no-progress --format table --output trivy-reports/${NAME}-${TAG}.txt $TARGET || true
+
+            docker push $TARGET
             echo "✅ Pushed $TARGET"
           done
 
+      - name: Upload Trivy reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: trivy-reports
+          path: trivy-reports/*.txt
