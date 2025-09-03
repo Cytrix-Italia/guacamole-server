@@ -55,7 +55,7 @@ jobs:
           done
 
       - name: Upload Trivy reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: trivy-reports
           path: trivy-reports/*.txt
