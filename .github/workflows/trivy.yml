@@ -39,18 +39,48 @@ jobs:
       - name: Pull Guacamole image
         run: |
           docker pull ghcr.io/cytrix-italia/guacamole-server/guacamole-guacd:latest
+          docker pull ghcr.io/cytrix-italia/guacamole-server/guacamole-guacamole:latest 
+          docker pull ghcr.io/cytrix-italia/guacamole-server/mysql:latest
       
 
-      - name: Run Trivy vulnerability scanner
+      - name: Run Trivy vulnerability scanner guad
         uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
         with:
           image-ref: 'ghcr.io/cytrix-italia/guacamole-server/guacamole-guacd:latest'
           format: 'template'
           template: '@/contrib/sarif.tpl'
-          output: 'trivy-results.sarif'
-          severity: 'CRITICAL,HIGH'
+          output: 'trivy-results-guacd.sarif'
+          severity: 'CRITICAL,HIGH,MEDIUM'
+      
+      - name: Run Trivy vulnerability scanner guacamole
+        uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
+        with:
+          image-ref: 'ghcr.io/cytrix-italia/guacamole-server/guacamole-guacamole:latest'
+          format: 'template'
+          template: '@/contrib/sarif.tpl'
+          output: 'trivy-results-guacamole.sarif'
+          severity: 'CRITICAL,HIGH,MEDIUM'
 
-      - name: Upload Trivy scan results to GitHub Security tab
+      - name: Run Trivy vulnerability scanner MySql
+        uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
+        with:
+          image-ref: 'ghcr.io/cytrix-italia/guacamole-server/mysql:latest'
+          format: 'template'
+          template: '@/contrib/sarif.tpl'
+          output: 'trivy-results-mysql.sarif'
+          severity: 'CRITICAL,HIGH,MEDIUM'
+
+      - name: Upload Trivy scan results to GitHub Security tab (guacd)
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: 'trivy-results.sarif'
+          sarif_file: 'trivy-results-guacd.sarif'
+          
+      - name: Upload Trivy scan results to GitHub Security tab (guacamole)
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results-guacamole.sarif'
+
+      - name: Upload Trivy scan results to GitHub Security tab (mysql)
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results-mysql.sarif'
