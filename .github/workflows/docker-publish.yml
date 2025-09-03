@@ -48,7 +48,7 @@ jobs:
             docker tag $IMAGE $TARGET
 
             echo "🔍 Running Trivy scan on $TARGET ..."
-            trivy image --no-progress --format table --output trivy-reports/${NAME}-${TAG}.txt $TARGET || true
+            trivy image --no-progress --format table --output trivy-reports/${NAME}-${TAG}.txt $TARGET || echo "Scan failed for $TARGET" > trivy-reports/${NAME}-${TAG}.txt
 
             docker push $TARGET
             echo "✅ Pushed $TARGET"
