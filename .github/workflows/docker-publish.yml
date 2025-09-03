@@ -39,9 +39,9 @@ jobs:
         run: |
           for IMAGE in $IMAGES; do
             echo "Importing $IMAGE ..."
-            NAME=$(echo $IMAGE | cut -d: -f1 | sed 's|/|-|g')   # esempio: guacamole-guacamole
+            NAME=$(echo $IMAGE | cut -d: -f1 | sed 's|/|-|g' | tr '[:upper:]' '[:lower:]')   # esempio: guacamole-guacamole
             TAG=$(echo $IMAGE | cut -d: -f2)                    # esempio: 1.5.5
-            TARGET=${REGISTRY}/${IMAGE_NAME}/${NAME}:${TAG}
+            TARGET=${REGISTRY}/${IMAGE_NAME}/${NAME}:${TAG} | tr '[:upper:]' '[:lower:]')
 
             docker pull $IMAGE
             docker tag $IMAGE $TARGET
