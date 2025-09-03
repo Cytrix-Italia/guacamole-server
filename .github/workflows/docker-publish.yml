@@ -1,0 +1,51 @@
+name: Mirror Guacamole
+
+on:
+  workflow_dispatch: # Avvio manuale
+  schedule:
+    - cron: '32 13 * * *' # Ogni giorno alle 13:32 UTC
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log into GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Lista immagini ufficiali da importare
+      - name: Define images
+        run: |
+          echo "IMAGES=\
+          guacamole/guacd:latest \
+          guacamole/guacamole:latest \
+          mysql:latest" >> $GITHUB_ENV
+
+      # Scarica, ritagga e pusha ogni immagine
+      - name: Mirror images
+        run: |
+          for IMAGE in $IMAGES; do
+            echo "Importing $IMAGE ..."
+            NAME=$(echo $IMAGE | cut -d: -f1 | sed 's|/|-|g')   # esempio: guacamole-guacamole
+            TAG=$(echo $IMAGE | cut -d: -f2)                    # esempio: 1.5.5
+            TARGET=${REGISTRY}/${IMAGE_NAME}/${NAME}:${TAG}
+
+            docker pull $IMAGE
+            docker tag $IMAGE $TARGET
+            docker push $TARGET
+
+            echo "✅ Pushed $TARGET"
+          done
