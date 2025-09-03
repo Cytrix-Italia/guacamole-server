@@ -70,17 +70,20 @@ jobs:
           output: 'trivy-results-mysql.sarif'
           severity: 'CRITICAL,HIGH,MEDIUM'
 
-      - name: Upload Trivy scan results to GitHub Security tab (guacd)
+      - name: Upload Trivy scan results Guacd
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: 'trivy-results-guacd.sarif'
-          
-      - name: Upload Trivy scan results to GitHub Security tab (guacamole)
+          category: 'trivy-guacd'
+
+      - name: Upload Trivy scan results Guacamole
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: 'trivy-results-guacamole.sarif'
+          category: 'trivy-guacamole'
 
-      - name: Upload Trivy scan results to GitHub Security tab (mysql)
+      - name: Upload Trivy scan results MySQL
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: 'trivy-results-mysql.sarif'
+          category: 'trivy-mysql'
