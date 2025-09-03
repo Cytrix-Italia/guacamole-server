@@ -47,14 +47,3 @@ jobs:
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: 'trivy-results.sarif'
-
-      - name: Generate SBOM with Trivy
-        run: |
-          mkdir -p sbom
-          trivy image --format cyclonedx --output sbom/sbom-${{ github.sha }}.json my-app:${{ github.sha }}
-          
-      - name: Upload SBOM artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: sbom
-          path: sbom/*.json
