@@ -93,23 +93,7 @@ jobs:
       - name: Generate SBOM guacd
         run: trivy image --format cyclonedx --output sbom-guacd.json ghcr.io/cytrix-italia/guacamole-server/guacamole-guacd:latest
 
-      - name: Upload SBOM guacd to Dependency Graph
-        uses: github/dependency-submission-action@v4
+      - name: SBOM upload 
+        uses: advanced-security/spdx-dependency-submission-action@v0.1.1
         with:
           sbom: sbom-guacd.json
-
-      - name: Generate SBOM guacamole
-        run: trivy image --format cyclonedx --output sbom-guacamole.json ghcr.io/cytrix-italia/guacamole-server/guacamole-guacamole:latest
-
-      - name: Upload SBOM guacamole to Dependency Graph
-        uses: github/dependency-submission-action@v4
-        with:
-          sbom: sbom-guacamole.json
-
-      - name: Generate SBOM mysql
-        run: trivy image --format cyclonedx --output sbom-mysql.json ghcr.io/cytrix-italia/guacamole-server/mysql:latest
-
-      - name: Upload SBOM mysql to Dependency Graph
-        uses: github/dependency-submission-action@v4
-        with:
-          sbom: sbom-mysql.json
