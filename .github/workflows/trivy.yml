@@ -87,13 +87,3 @@ jobs:
         with:
           sarif_file: 'trivy-results-mysql.sarif'
           category: 'trivy-mysql'
-      # ---------------------------
-      # SBOM Generation + Upload
-      # ---------------------------
-      - name: Generate SBOM guacd
-        run: trivy image --format cyclonedx --output sbom-guacd.json ghcr.io/cytrix-italia/guacamole-server/guacamole-guacd:latest
-
-      - name: SBOM upload 
-        uses: advanced-security/spdx-dependency-submission-action@v0.1.1
-        with:
-          sbom: sbom-guacd.json
