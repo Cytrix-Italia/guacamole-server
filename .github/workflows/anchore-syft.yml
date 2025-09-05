@@ -11,28 +11,64 @@
 # and parameters, see https://github.com/anchore/sbom-action. For more
 # information about the Anchore SBOM tool, Syft, see
 # https://github.com/anchore/syft
-name: Anchore Syft SBOM scan
+name: SBOM for GHCR images
 
 on:
-  push:
-    branches: [ "main" ]
+  workflow_dispatch:
+  schedule:
+    - cron: "0 3 * * *" # ogni notte alle 3
 
 permissions:
   contents: write
+  packages: read   # serve per leggere da GHCR
 
 jobs:
-  Anchore-Build-Scan:
-    permissions:
-      contents: write # required to upload to the Dependency submission API
+  sbom:
     runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout the code
+    - name: Checkout repo
       uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag localbuild/testimage:latest
-    - name: Scan the image and upload dependency results
-      uses: anchore/sbom-action@bb716408e75840bbb01e839347cd213767269d4a
+
+    # 1. Login a GHCR
+    - name: Log in to GHCR
+      uses: docker/login-action@v3
       with:
-        image: "localbuild/testimage:latest"
-        artifact-name: image.spdx.json
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    # 2. Lista delle immagini da controllare
+    - name: Generate SBOM for guacamole-guacd
+      uses: anchore/sbom-action@v0.15.8
+      with:
+        image: ghcr.io/cytrix-italia/guacamole-guacd:latest
+        format: cyclonedx-json
         dependency-snapshot: true
+        artifact-name: guacd-sbom.json
+
+    - name: Generate SBOM for guacamole-guacamole
+      uses: anchore/sbom-action@v0.15.8
+      with:
+        image: ghcr.io/cytrix-italia/guacamole-guacamole:latest
+        format: cyclonedx-json
+        dependency-snapshot: true
+        artifact-name: guacamole-sbom.json
+
+    - name: Generate SBOM for mysql
+      uses: anchore/sbom-action@v0.15.8
+      with:
+        image: ghcr.io/cytrix-italia/mysql:latest
+        format: cyclonedx-json
+        dependency-snapshot: true
+        artifact-name: mysql-sbom.json
+
+    # 3. Upload artifact multipli
+    - name: Upload all SBOMs
+      uses: actions/upload-artifact@v4
+      with:
+        name: sboms
+        path: |
+          guacd-sbom.json
+          guacamole-sbom.json
+          mysql-sbom.json
