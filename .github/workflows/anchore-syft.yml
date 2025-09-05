@@ -25,12 +25,16 @@ permissions:
 jobs:
   sbom:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image: 
+          - ghcr.io/cytrix-italia/guacamole-guacd:latest
+          - ghcr.io/cytrix-italia/guacamole-guacamole:latest
+          - ghcr.io/cytrix-italia/mysql:latest
 
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-    # 1. Login a GHCR
     - name: Log in to GHCR
       uses: docker/login-action@v3
       with:
@@ -38,30 +42,13 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GHCR_PAT }} 
 
-    # 2. Lista delle immagini da controllare
-    - name: Generate SBOM for guacamole-guacd
+    - name: Generate SBOM
       uses: anchore/sbom-action@v0.15.8
       with:
-        image: ghcr.io/cytrix-italia/guacamole-guacd:latest
+        image: ${{ matrix.image }}
         format: cyclonedx-json
         dependency-snapshot: true
-        artifact-name: guacd-sbom.json
-
-    - name: Generate SBOM for guacamole-guacamole
-      uses: anchore/sbom-action@v0.15.8
-      with:
-        image: ghcr.io/cytrix-italia/guacamole-guacamole:latest
-        format: cyclonedx-json
-        dependency-snapshot: true
-        artifact-name: guacamole-sbom.json
-
-    - name: Generate SBOM for mysql
-      uses: anchore/sbom-action@v0.15.8
-      with:
-        image: ghcr.io/cytrix-italia/mysql:latest
-        format: cyclonedx-json
-        dependency-snapshot: true
-        artifact-name: mysql-sbom.json
+        artifact-name: sbom-${{ matrix.image##*/ }}.json
 
     # 3. Upload artifact multipli
     - name: Upload all SBOMs
