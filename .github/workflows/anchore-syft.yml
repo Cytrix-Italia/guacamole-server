@@ -36,7 +36,7 @@ jobs:
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+        password: ${{ secrets.GHCR_PAT }} 
 
     # 2. Lista delle immagini da controllare
     - name: Generate SBOM for guacamole-guacd
