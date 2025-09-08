@@ -34,6 +34,7 @@ jobs:
            image: ghcr.io/cytrix-italia/guacamole-server/guacamole-guacamole:latest
            format: spdx-json
            output-file: sbom-guacamole.json
+           upload-artifact: false
 
       # Genera SBOM per guacamole-guacd
       - name: SBOM for guacamole-guacd
@@ -42,6 +43,7 @@ jobs:
           image: ghcr.io/cytrix-italia/guacamole-server/guacamole-guacd:latest
           format: spdx-json
           output-file: sbom-guacd.json
+          upload-artifact: false
 
       # Genera SBOM per mysql
       - name: SBOM for mysql
@@ -50,6 +52,7 @@ jobs:
           image: ghcr.io/cytrix-italia/guacamole-server/mysql:latest
           format: spdx-json
           output-file: sbom-mysql.json
+          upload-artifact: false
 
       - name: Upload all SBOMs as artifact
         uses: actions/upload-artifact@v4
