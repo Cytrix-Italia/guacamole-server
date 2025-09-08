@@ -4,7 +4,7 @@ on:
   workflow_dispatch:   # lo lanci a mano quando ti serve
 
 permissions:
-  contents: read
+  contents: write
   security-events: write
 
 jobs:
@@ -62,8 +62,27 @@ jobs:
             sbom-guacamole.json
             sbom-guacd.json
             sbom-mysql.json
-      - name: Submit dependencies to GitHub
-        uses: advanced-security/component-detection-dependency-submission-action@v0.0.3
+      - name: Upload all SBOMs as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-sboms
+          path: |
+            sbom-guacamole.json
+            sbom-guacd.json
+            sbom-mysql.json
+
+      - name: Submit SBOM for guacamole-guacamole
+        uses: advanced-security/spdx-dependency-submission-action@v0.0.1
         with:
           filePath: sbom-guacamole.json
+
+      - name: Submit SBOM for guacamole-guacd
+        uses: advanced-security/spdx-dependency-submission-action@v0.0.1
+        with:
+          filePath: sbom-guacd.json
+
+      - name: Submit SBOM for mysql
+        uses: advanced-security/spdx-dependency-submission-action@v0.0.1
+        with:
+          filePath: sbom-mysql.json
 
