@@ -28,12 +28,12 @@ jobs:
           docker pull ghcr.io/cytrix-italia/guacamole-server/mysql:latest
 
       # Genera SBOM per guacamole-guacamole
-      #- name: SBOM for guacamole-guacamole
-      #  uses: anchore/sbom-action@v0
-      #  with:
-      #    image: ghcr.io/${{ github.repository }}/guacamole-guacamole:latest
-      #    format: spdx-json
-      #    output-file: sbom-guacamole.json
+      - name: SBOM for guacamole-guacamole
+        uses: anchore/sbom-action@v0
+        with:
+           image: ghcr.io/cytrix-italia/guacamole-server/guacamole-guacamole:latest
+           format: spdx-json
+           output-file: sbom-guacamole.json
 
       # Genera SBOM per guacamole-guacd
       - name: SBOM for guacamole-guacd
@@ -47,7 +47,7 @@ jobs:
       - name: SBOM for mysql
         uses: anchore/sbom-action@v0
         with:
-          image: ghcr.io/${{ github.repository }}/mysql:latest
+          image: ghcr.io/cytrix-italia/guacamole-server/mysql:latest
           format: spdx-json
           output-file: sbom-mysql.json
 
@@ -55,11 +55,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: docker-sboms
-          #path: |
-            #sbom-guacamole.json
-            #sbom-guacd.json
-            #sbom-mysql.json
           path: |
+            sbom-guacamole.json
             sbom-guacd.json
             sbom-mysql.json
 
