@@ -63,9 +63,21 @@ jobs:
             sbom-guacd.json
             sbom-mysql.json
 
-      - name: Submit SBOMs to GitHub Dependency Graph
+      - name: Submit SBOM for guacamole-guacamole
         uses: anchore/sbom-action@v0
         with:
-          image: ghcr.io/cytrix-italia/guacamole-server/guacamole-guacamole:latest
+           image: ghcr.io/cytrix-italia/guacamole-server/guacamole-guacamole:latest
+           github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Submit SBOM for guacamole-guacd
+        uses: anchore/sbom-action@v0
+        with:
+          image: ghcr.io/cytrix-italia/guacamole-server/guacamole-guacd:latest
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Submit SBOM for mysql
+        uses: anchore/sbom-action@v0
+        with:
+          image: ghcr.io/cytrix-italia/guacamole-server/mysql:latest
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
