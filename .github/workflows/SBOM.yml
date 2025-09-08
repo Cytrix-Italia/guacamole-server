@@ -63,6 +63,6 @@ jobs:
       - name: Submit SBOMs to GitHub Dependency Graph
         uses: anchore/sbom-action@v0
         with:
-          image: ghcr.io/Cytrix-Italia/guacamole-server/guacamole-guacamole:latest
+          image: ghcr.io/cytrix-italia/guacamole-server/guacamole-guacamole:latest
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
