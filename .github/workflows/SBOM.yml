@@ -32,7 +32,7 @@ jobs:
         uses: anchore/sbom-action@v0
         with:
            image: ghcr.io/cytrix-italia/guacamole-server/guacamole-guacamole:latest
-           format: spdx-json
+           format: spdx-json@2.2
            output-file: sbom-guacamole.json
 
       # Genera SBOM per guacamole-guacd
@@ -40,7 +40,7 @@ jobs:
         uses: anchore/sbom-action@v0
         with:
           image: ghcr.io/cytrix-italia/guacamole-server/guacamole-guacd:latest
-          format: spdx-json
+          format: spdx-json@2.2
           output-file: sbom-guacd.json
 
       # Genera SBOM per mysql
@@ -48,7 +48,7 @@ jobs:
         uses: anchore/sbom-action@v0
         with:
           image: ghcr.io/cytrix-italia/guacamole-server/mysql:latest
-          format: spdx-json
+          format: spdx-json@2.2
           output-file: sbom-mysql.json
 
       - name: Submit SBOM for guacamole-guacamole
