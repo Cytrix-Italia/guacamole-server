@@ -32,37 +32,37 @@ jobs:
         uses: anchore/sbom-action@v0
         with:
            image: ghcr.io/cytrix-italia/guacamole-server/guacamole-guacamole:latest
-           format: spdx-json@2.2
-           output-file: sbom-guacamole.json
+           format: cyclonedx-json
+           output-file: sbom-guacamole.cdx.json
 
       # Genera SBOM per guacamole-guacd
       - name: SBOM for guacamole-guacd
         uses: anchore/sbom-action@v0
         with:
           image: ghcr.io/cytrix-italia/guacamole-server/guacamole-guacd:latest
-          format: spdx-json@2.2
-          output-file: sbom-guacd.json
+          format: cyclonedx-json
+          output-file: sbom-guacd.cdx.json
 
       # Genera SBOM per mysql
       - name: SBOM for mysql
         uses: anchore/sbom-action@v0
         with:
           image: ghcr.io/cytrix-italia/guacamole-server/mysql:latest
-          format: spdx-json@2.2
-          output-file: sbom-mysql.json
+          format: cyclonedx-json
+          output-file: sbom-mysql.cdx.json
 
       - name: Submit SBOM for guacamole-guacamole
         uses: advanced-security/spdx-dependency-submission-action@v0.0.1
         with:
-          filePath: sbom-guacamole.json
+          filePath: sbom-guacamole.cdx.json
 
       - name: Submit SBOM for guacamole-guacd
         uses: advanced-security/spdx-dependency-submission-action@v0.0.1
         with:
-          filePath: sbom-guacd.json
+          filePath: sbom-guacd.cdx.json
 
       - name: Submit SBOM for mysql
         uses: advanced-security/spdx-dependency-submission-action@v0.0.1
         with:
-          filePath: sbom-mysql.json
+          filePath: sbom-mysql.cdx.json
 
