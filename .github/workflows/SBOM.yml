@@ -21,6 +21,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GHCR_PAT }}
 
+      - name: Pull Guacamole image
+        run: |
+          docker pull ghcr.io/cytrix-italia/guacamole-server/guacamole-guacd:latest
+          docker pull ghcr.io/cytrix-italia/guacamole-server/guacamole-guacamole:latest 
+          docker pull ghcr.io/cytrix-italia/guacamole-server/mysql:latest
+
       # Genera SBOM per guacamole-guacamole
       #- name: SBOM for guacamole-guacamole
       #  uses: anchore/sbom-action@v0
