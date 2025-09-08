@@ -1,0 +1,60 @@
+name: SBOM → GitHub Dependency Graph (via Syft github-json)
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write         # NECESSARIO per il submit
+  security-events: write
+
+jobs:
+  submit-sbom:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Log in to GHCR (se le immagini sono private)
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_PAT }}
+
+      - name: Pull image(s)
+        run: |
+          docker pull ghcr.io/cytrix-italia/guacamole-server/guacamole-guacamole:latest
+
+      - name: Generate GitHub snapshot with Syft
+        run: |
+          # crea sbom (formato snapshot GitHub)
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD":"$PWD" -w "$PWD" anchore/syft:latest \
+            ghcr.io/cytrix-italia/guacamole-server/guacamole-guacamole:latest -o github-json --file sbom-github.json
+          echo "=== preview ==="
+          jq '(.manifests | length), (.manifests | keys | length?)' sbom-github.json || true
+
+      - name: Quick sanity check (manifests non vuoto)
+        run: |
+          echo "manifests count:"
+          jq '.manifests | length' sbom-github.json
+          echo "esempio package url (se presenti):"
+          jq -r '.manifests[]?.packages[]?.package_url' sbom-github.json | head -n 20 || true
+
+      - name: Submit snapshot to GitHub Dependency Graph
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          echo "POSTing snapshot..."
+          http_status=$(curl -s -w "%{http_code}" -o /tmp/resp.json \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/$REPO/dependency-graph/snapshots" \
+            --data-binary @sbom-github.json)
+          echo "HTTP status: $http_status"
+          cat /tmp/resp.json
+          if [[ "$http_status" -ge 300 ]]; then
+            echo "Errore: upload snapshot fallito"
+            exit 1
+          fi
