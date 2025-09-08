@@ -52,17 +52,17 @@ jobs:
           output-file: sbom-mysql.cdx.json
 
       - name: Submit SBOM for guacamole-guacamole
-        uses: advanced-security/maven-dependency-submission-action@v5
+        uses: github/dependency-submission-action@v3
         with:
           filePath: sbom-guacamole.cdx.json
 
       - name: Submit SBOM for guacamole-guacd
-        uses: advanced-security/maven-dependency-submission-action@v5
+        uses: github/dependency-submission-action@v3
         with:
           filePath: sbom-guacd.cdx.json
 
       - name: Submit SBOM for mysql
-        uses: advanced-security/maven-dependency-submission-action@v5
+        uses: github/dependency-submission-action@v3
         with:
           filePath: sbom-mysql.cdx.json
 
