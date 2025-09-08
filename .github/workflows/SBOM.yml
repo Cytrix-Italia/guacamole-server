@@ -63,8 +63,7 @@ jobs:
             sbom-guacd.json
             sbom-mysql.json
       - name: Submit dependencies to GitHub
-        uses: advanced-security/dependency-submission-action@v1
+        uses: advanced-security/component-detection-dependency-submission-action@v0.0.3
         with:
-          file: sbom-guacamole.json
-          format: cyclonedx-json 
+          filePath: sbom-guacamole.json
 
