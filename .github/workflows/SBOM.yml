@@ -39,7 +39,7 @@ jobs:
       - name: SBOM for guacamole-guacd
         uses: anchore/sbom-action@v0
         with:
-          image: ghcr.io/${{ github.repository }}/guacamole-guacd:latest
+          image: ghcr.io/cytrix-italia/guacamole-server/guacamole-guacd:latest
           format: spdx-json
           output-file: sbom-guacd.json
 
