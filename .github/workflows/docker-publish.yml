@@ -41,6 +41,7 @@ jobs:
             NAME=$(echo $IMAGE | cut -d: -f1 | sed 's|/|-|g' | tr '[:upper:]' '[:lower:]')
             TAG=$(echo $IMAGE | cut -d: -f2)
             TARGET=$(echo ${REGISTRY}/${IMAGE_NAME}/${NAME}:${TAG} | tr '[:upper:]' '[:lower:]')
+            done
 
       - name: Pull Guacamole image
         run: |
