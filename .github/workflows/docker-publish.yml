@@ -41,43 +41,6 @@ jobs:
             NAME=$(echo $IMAGE | cut -d: -f1 | sed 's|/|-|g' | tr '[:upper:]' '[:lower:]')
             TAG=$(echo $IMAGE | cut -d: -f2)
             TARGET=$(echo ${REGISTRY}/${IMAGE_NAME}/${NAME}:${TAG} | tr '[:upper:]' '[:lower:]')
-            done
-
-      - name: Pull Guacamole image
-        run: |
-          docker pull ghcr.io/cytrix-italia/guacamole-server/guacamole-guacd:latest
-          docker pull ghcr.io/cytrix-italia/guacamole-server/guacamole-guacamole:latest 
-          docker pull ghcr.io/cytrix-italia/guacamole-server/mysql:latest
-      
-
-      - name: Run Trivy vulnerability scanner guad
-        uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
-        with:
-          image-ref: 'ghcr.io/cytrix-italia/guacamole-server/guacamole-guacd:latest'
-          format: 'template'
-          template: '@/contrib/sarif.tpl'
-          output: 'trivy-results-guacd.sarif'
-          severity: 'CRITICAL,HIGH,MEDIUM'
-      
-      - name: Run Trivy vulnerability scanner guacamole
-        uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
-        with:
-          image-ref: 'ghcr.io/cytrix-italia/guacamole-server/guacamole-guacamole:latest'
-          format: 'template'
-          template: '@/contrib/sarif.tpl'
-          output: 'trivy-results-guacamole.sarif'
-          severity: 'CRITICAL,HIGH,MEDIUM'
-
-      - name: Run Trivy vulnerability scanner MySql
-        uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
-        with:
-          image-ref: 'ghcr.io/cytrix-italia/guacamole-server/mysql:latest'
-          format: 'template'
-          template: '@/contrib/sarif.tpl'
-          output: 'trivy-results-mysql.sarif'
-          severity: 'CRITICAL,HIGH,MEDIUM'
-      - name: Run ended 
-        run: |
             docker tag $IMAGE $TARGET
 
             echo "🔍 Running Trivy scan on $TARGET ..."
