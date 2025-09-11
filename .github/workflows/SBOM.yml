@@ -51,18 +51,8 @@ jobs:
           format: cyclonedx-json
           output-file: sbom-mysql.cdx.json
 
-      - name: Submit SBOM for guacamole-guacamole
-        uses: sbom-submission-action@v1
+      - name: Component detection
+        uses: advanced-security/component-detection-dependency-submission-action@v0.1.0
         with:
-          filePath: sbom-guacamole.cdx.json
-
-      - name: Submit SBOM for guacamole-guacd
-        uses: sbom-submission-action@v1
-        with:
-          filePath: sbom-guacd.cdx.json
-
-      - name: Submit SBOM for mysql
-        uses: sbom-submission-action@v1
-        with:
-          filePath: sbom-mysql.cdx.json
+          dockerImagesToScan: guacamole-server/mysql
 
