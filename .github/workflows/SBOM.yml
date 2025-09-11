@@ -27,9 +27,6 @@ jobs:
           docker pull ghcr.io/cytrix-italia/guacamole-server/guacamole-guacamole:latest 
           docker pull ghcr.io/cytrix-italia/guacamole-server/mysql:latest
 
-      - uses: anchore/sbom-action@v0
-        with:
-           image: ghcr.io/cytrix-italia/guacamole-server/guacamole-guacd:latest
       # Genera SBOM per guacamole-guacamole
       - name: SBOM for guacamole-guacamole
         uses: anchore/sbom-action@v0
@@ -62,4 +59,19 @@ jobs:
 
       - name: Component detection
         uses: advanced-security/component-detection-dependency-submission-action@v0.1.0
+
+      - name: Upload SBOM to Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: sbom-mysql.cdx.json
+
+      - name: Upload SBOM to Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: sbom-guacd.cdx.json
+
+      - name: Upload SBOM to Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: sbom-guacamole.cdx.json
 
