@@ -27,6 +27,9 @@ jobs:
           docker pull ghcr.io/cytrix-italia/guacamole-server/guacamole-guacamole:latest 
           docker pull ghcr.io/cytrix-italia/guacamole-server/mysql:latest
 
+      - uses: anchore/sbom-action@v0
+        with:
+           image: ghcr.io/example/image_name:tag
       # Genera SBOM per guacamole-guacamole
       - name: SBOM for guacamole-guacamole
         uses: anchore/sbom-action@v0
