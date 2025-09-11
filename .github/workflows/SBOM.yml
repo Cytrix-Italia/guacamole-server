@@ -34,6 +34,7 @@ jobs:
            image: ghcr.io/cytrix-italia/guacamole-server/guacamole-guacamole:latest
            format: spdx
            output-file: sbom-guacamole.json
+           dependency-snapshot: true
 
       - name: Component detection
         uses: advanced-security/component-detection-dependency-submission-action@v0.1.0
@@ -45,6 +46,7 @@ jobs:
           image: ghcr.io/cytrix-italia/guacamole-server/guacamole-guacd:latest
           format: spdx
           output-file: sbom-guacd.json
+          dependency-snapshot: true
 
       - name: Component detection
         uses: advanced-security/component-detection-dependency-submission-action@v0.1.0
@@ -56,6 +58,7 @@ jobs:
           image: ghcr.io/cytrix-italia/guacamole-server/mysql:latest
           format: spdx
           output-file: sbom-mysql.json
+          dependency-snapshot: true
 
       - name: Component detection
         uses: advanced-security/component-detection-dependency-submission-action@v0.1.0
