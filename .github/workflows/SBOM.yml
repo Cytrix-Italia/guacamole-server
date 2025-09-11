@@ -32,7 +32,7 @@ jobs:
         uses: anchore/sbom-action@v0
         with:
            image: ghcr.io/cytrix-italia/guacamole-server/guacamole-guacamole:latest
-           format: spdx-json
+           format: spdx
            output-file: sbom-guacamole.json
 
       - name: Component detection
@@ -43,7 +43,7 @@ jobs:
         uses: anchore/sbom-action@v0
         with:
           image: ghcr.io/cytrix-italia/guacamole-server/guacamole-guacd:latest
-          format: spdx-json
+          format: spdx
           output-file: sbom-guacd.json
 
       - name: Component detection
@@ -54,7 +54,7 @@ jobs:
         uses: anchore/sbom-action@v0
         with:
           image: ghcr.io/cytrix-italia/guacamole-server/mysql:latest
-          format: spdx-json
+          format: spdx
           output-file: sbom-mysql.json
 
       - name: Component detection
