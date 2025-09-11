@@ -35,6 +35,9 @@ jobs:
            format: cyclonedx-json
            output-file: sbom-guacamole.cdx.json
 
+      - name: Component detection
+        uses: advanced-security/component-detection-dependency-submission-action@v0.1.0
+        
       # Genera SBOM per guacamole-guacd
       - name: SBOM for guacamole-guacd
         uses: anchore/sbom-action@v0
@@ -42,6 +45,9 @@ jobs:
           image: ghcr.io/cytrix-italia/guacamole-server/guacamole-guacd:latest
           format: cyclonedx-json
           output-file: sbom-guacd.cdx.json
+
+      - name: Component detection
+        uses: advanced-security/component-detection-dependency-submission-action@v0.1.0
 
       # Genera SBOM per mysql
       - name: SBOM for mysql
@@ -53,6 +59,4 @@ jobs:
 
       - name: Component detection
         uses: advanced-security/component-detection-dependency-submission-action@v0.1.0
-        with:
-          dockerImagesToScan: guacamole-server/mysql
 
