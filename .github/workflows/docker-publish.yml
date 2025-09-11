@@ -2,6 +2,8 @@ name: Mirror Guacamole
 
 on:
   workflow_dispatch: # Avvio manuale
+  schedule:
+    - cron: '32 13 * * *' # Ogni giorno alle 13:32 UTC
 
 env:
   REGISTRY: ghcr.io
@@ -42,7 +44,7 @@ jobs:
             TAG=$(echo $IMAGE | cut -d: -f2)
             TARGET=$(echo ${REGISTRY}/${IMAGE_NAME}/${NAME}:${TAG} | tr '[:upper:]' '[:lower:]')
 
-            docker pull $IMAGES
+            docker pull $IMAGE
             docker tag $IMAGE $TARGET
 
             echo "🔍 Running Trivy scan on $TARGET ..."
@@ -50,7 +52,7 @@ jobs:
 
             docker push $TARGET
             echo "✅ Pushed $TARGET"
-            done
+          done
 
       - name: Upload Trivy reports
         uses: actions/upload-artifact@v4
