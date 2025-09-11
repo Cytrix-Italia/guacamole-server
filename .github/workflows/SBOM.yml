@@ -60,18 +60,20 @@ jobs:
       - name: Component detection
         uses: advanced-security/component-detection-dependency-submission-action@v0.1.0
 
-      - name: Upload SBOM to Release
-        uses: softprops/action-gh-release@v1
+      - name: Submit dependencies to GitHub Dependency Graph
+        uses: github/dependency-submission-action@v2
         with:
-          files: sbom-mysql.cdx.json
+          # path al file CycloneDX JSON generato sopra
+          sbom-path: sbom-mysql.cdx.json
+      - name: Submit dependencies to GitHub Dependency Graph
+        uses: github/dependency-submission-action@v2
+        with:
+          # path al file CycloneDX JSON generato sopra
+          sbom-path: sbom-guacd.cdx.json
 
-      - name: Upload SBOM to Release
-        uses: softprops/action-gh-release@v1
+      - name: Submit dependencies to GitHub Dependency Graph
+        uses: github/dependency-submission-action@v2
         with:
-          files: sbom-guacd.cdx.json
-
-      - name: Upload SBOM to Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: sbom-guacamole.cdx.json
+          # path al file CycloneDX JSON generato sopra
+          sbom-path: sbom-guacamole.cdx.json
 
