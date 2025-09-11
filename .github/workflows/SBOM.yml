@@ -32,8 +32,8 @@ jobs:
         uses: anchore/sbom-action@v0
         with:
            image: ghcr.io/cytrix-italia/guacamole-server/guacamole-guacamole:latest
-           format: cyclonedx-json
-           output-file: sbom-guacamole.cdx.json
+           format: spdx-json
+           output-file: sbom-guacamole.json
 
       - name: Component detection
         uses: advanced-security/component-detection-dependency-submission-action@v0.1.0
@@ -43,8 +43,8 @@ jobs:
         uses: anchore/sbom-action@v0
         with:
           image: ghcr.io/cytrix-italia/guacamole-server/guacamole-guacd:latest
-          format: cyclonedx-json
-          output-file: sbom-guacd.cdx.json
+          format: spdx-json
+          output-file: sbom-guacd.json
 
       - name: Component detection
         uses: advanced-security/component-detection-dependency-submission-action@v0.1.0
@@ -54,26 +54,24 @@ jobs:
         uses: anchore/sbom-action@v0
         with:
           image: ghcr.io/cytrix-italia/guacamole-server/mysql:latest
-          format: cyclonedx-json
-          output-file: sbom-mysql.cdx.json
+          format: spdx-json
+          output-file: sbom-mysql.json
 
       - name: Component detection
         uses: advanced-security/component-detection-dependency-submission-action@v0.1.0
 
-      - name: Submit dependencies to GitHub Dependency Graph
-        uses: github/dependency-submission-action@v2
+      - name: Submit SBOM to Dependency Submission API
+        uses: advanced-security/spdx-dependency-submission-action@v0.1.1
         with:
-          # path al file CycloneDX JSON generato sopra
-          sbom-path: sbom-mysql.cdx.json
-      - name: Submit dependencies to GitHub Dependency Graph
-        uses: github/dependency-submission-action@v2
+          filePath: sbom-guacamole.json
+          
+      - name: Submit SBOM to Dependency Submission API
+        uses: advanced-security/spdx-dependency-submission-action@v0.1.1
         with:
-          # path al file CycloneDX JSON generato sopra
-          sbom-path: sbom-guacd.cdx.json
-
-      - name: Submit dependencies to GitHub Dependency Graph
-        uses: github/dependency-submission-action@v2
+          filePath: sbom-guacd.json
+          
+      - name: Submit SBOM to Dependency Submission API
+        uses: advanced-security/spdx-dependency-submission-action@v0.1.1
         with:
-          # path al file CycloneDX JSON generato sopra
-          sbom-path: sbom-guacamole.cdx.json
+          filePath: sbom-mysql.json
 
