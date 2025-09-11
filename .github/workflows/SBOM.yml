@@ -29,7 +29,7 @@ jobs:
 
       - uses: anchore/sbom-action@v0
         with:
-           image: ghcr.io/example/image_name:tag
+           image: ghcr.io/cytrix-italia/guacamole-server/guacamole-guacd:latest
       # Genera SBOM per guacamole-guacamole
       - name: SBOM for guacamole-guacamole
         uses: anchore/sbom-action@v0
