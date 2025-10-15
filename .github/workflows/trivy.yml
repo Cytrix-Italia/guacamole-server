@@ -45,6 +45,7 @@ jobs:
           template: '@/contrib/sarif.tpl'
           output: 'trivy-results-guacd.sarif'
           severity: 'CRITICAL,HIGH,MEDIUM'
+          timeout: 30m
       
       - name: Run Trivy vulnerability scanner guacamole
         uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
@@ -54,7 +55,7 @@ jobs:
           template: '@/contrib/sarif.tpl'
           output: 'trivy-results-guacamole.sarif'
           severity: 'CRITICAL,HIGH,MEDIUM'
-          timeout: '10m0s'
+          timeout: 30m
 
       - name: Run Trivy vulnerability scanner MySql
         uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
@@ -64,6 +65,7 @@ jobs:
           template: '@/contrib/sarif.tpl'
           output: 'trivy-results-mysql.sarif'
           severity: 'CRITICAL,HIGH,MEDIUM'
+          timeout: 30m
 
       - name: Upload Trivy scan results Guacd
         uses: github/codeql-action/upload-sarif@v3
