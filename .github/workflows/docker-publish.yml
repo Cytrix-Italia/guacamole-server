@@ -3,7 +3,7 @@ name: Mirror Guacamole
 on:
   workflow_dispatch: # Avvio manuale
   schedule:
-    - cron: '32 13 * * *' # Ogni giorno alle 13:32 UTC
+    - cron: '32 13 7 * *' # Ogni giorno alle 13:32 UTC
 
 env:
   REGISTRY: ghcr.io
